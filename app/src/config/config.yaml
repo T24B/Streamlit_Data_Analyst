@@ -1,0 +1,91 @@
+deepseek_base_url: "https://api.deepseek.com"
+
+decide_target_attribute_template: |
+  You are a data analyst. You are trying to find out which attribute is the target attribute from the data frame. 
+  The attributes are {attributes}. 
+  The types of these attributes are {types_info}.
+  The head(10) of the data frame is {head_info}.
+  Determine the target attribute to predict based on the data information provided.
+  Only the data is returned in json format without any other explanation or content.
+  Sample response:{{"target":"species"}}
+  If the provided data is not sufficient to determine the target, only return the data in json format {{"target":-1}}
+
+null_attribute_template: |
+  You are a data analyst. You are preprocessing the attributes in the data that contain null values.
+  The columns to be processed include: {attributes}. 
+  The types of these attributes are:{types_info}.
+  Statistics for these properties in csv format:{description_info}
+  Please help me decide how to supplement null values for each attribute based on content,statistics and semantics.
+  The mean filling is represented by 1,
+  the median filling is represented by 2,
+  the mode filling is represented by 3,
+  the introduction of a new category to represent the unknown is represented by 4,
+  and the interpolation filling is represented by 5.
+  Only the data is returned in json format without any other explanation or content.
+  Sample response: {{"grade":2,"annual_income":2,"temperature":1,"fault_type":3,"country":4,"weight":1,"stock price":5}}
+
+numeric_attributes_template: |
+  You are a data analyst and feature engineering expert.
+  You are cleaning tabular data and deciding how to encode non-numeric columns.
+
+  Below is a object mapping each column name to its number of unique values (n_unique):
+
+  {attributes_unique_info}
+
+  Decide the encoding method for each column using the following STRICT rules.
+  These rules are HARD CONSTRAINTS. You MUST apply them literally, in order.
+  Do NOT override any rule with your own judgment about what is "reasonable".
+
+  1. If n_unique == 2 -> numeric_mapping (code 1).
+  2. If n_unique <= 10 -> one_hot (code 2).
+  3. If 10 < n_unique <= 50 -> numeric_mapping (code 1).
+  4. If n_unique > 50 -> drop (code 3).
+     Even if the column looks like a category, NEVER use one_hot when n_unique > 50.
+  5. If the column name clearly indicates an identifier or unstructured text,
+     such as Name, Ticket, ID, UUID, Passport, Email, Address, Description,
+     Comment, Review, URL, FilePath -> drop (code 3).
+     These columns have no meaningful category structure and must NOT be encoded.
+
+  Apply the rules in order. The FIRST matching rule wins.
+  For example, if n_unique = 891, rule 4 matches first -> code 3.
+
+  Encoding codes: 1 = numeric_mapping, 2 = one_hot, 3 = drop.
+
+  Return ONLY a JSON object mapping column name to code.
+  Do NOT include any explanation, markdown, or extra text.
+
+  Example response: {{"color": 2, "size": 2, "country": 1, "brand": 2, "gender": 2, "Name": 3, "Ticket": 3, "ID": 3}}
+
+decide_test_ratio_template: |
+  You are a data analyst. You are trying to split the data frame into training set and test set.
+  The shape of my data frame is {shape_info}.
+  Determine the test set ratio based on the shape information provided and it's assumed that the categories of the target variable are balanced.
+  The test set ratio range is 0.01 to 0.25.
+  Only the data is returned in json format without any other explanation or content.
+  Sample response: {{"test_ratio":0.25}}
+
+decide_balance_template: |
+  You are a data analyst. You have a cleaned and pre-processed data frame and you want to handle class imbalance before training the machine learning model.
+  The shape of my data frame is {shape_info}.
+  The description of the data frame is:{description_info}.
+  The number of each value of the target attribute is: {balance_info}.
+  Determine the balance strategy based on the data information provided.
+  The RandomOverSampler is represented by 1,
+  the SMOTE is represented by 2,
+  the ADASYN is represented by 3,
+  and do not balance is represented by 4.
+  Only the data is returned in json format without any other explanation or content.
+  Sample response: {{"method":2}}
+  
+decide_model_template: |
+  You are a data analyst.
+  The shape of my data frame is {shape_info}.
+  The head(5) of the data frame is:{head_info}.
+  The nunique() of the data frame is:{nunique_info}.
+  The description of the data frame is:{description_info}.
+  The data has been cleaned and preprocessed, nulls filled, and encoded ready to train the machine learning model.
+  According to the data information provided, please help me decide which machine learning models should be used for classification prediction.
+  Model options are: 1:LogisticRegression, 2:SVC, 3:GaussianNB, 4:RandomForestClassifier, 5:AdaBoostClassifier, 6:XGBClassifier, 7:GradientBoostingClassifier.
+  Please select three models to take into account different model performance indicators.
+  Only the data is returned in json format without any other explanation or content.
+  Sample response: {{"model1":1,"model2":4,"model3":6}}
