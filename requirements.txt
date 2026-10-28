@@ -1,2 +1,17 @@
 streamlit
 streamlit_lottie
+nltk
+numpy
+pandas
+matplotlib
+plotly
+scikit-learn
+seaborn
+wordcloud
+PyYAML
+langchain_core
+langchain_ollama
+langchain_openai
+imbalanced-learn
+joblib
+xgboost
