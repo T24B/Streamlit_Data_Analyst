@@ -26,11 +26,12 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller ^
-            --onefile ^
-            --paths app ^
-            --collect-data streamlit ^
-            --name Streamline-Analyst ^
+          pyinstaller `
+            --onefile `
+            --paths app `
+            --collect-all streamlit `
+            --copy-metadata streaemlit `
+            --name Streamline-Analyst `
             app/app.py
 
       - name: Upload EXE artifact
