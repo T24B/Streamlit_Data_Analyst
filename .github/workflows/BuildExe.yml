@@ -14,7 +14,7 @@ jobs:
 
       #安装指定Python版本到运行器中
       - name: Set up Pytyhon
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.10'
 
