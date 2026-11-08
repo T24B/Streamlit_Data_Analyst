@@ -1,0 +1,42 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      #检出代码到运行器中
+      - name: Checkout repositorty
+        uses: actions/checkout@v5
+
+      #安装指定Python版本到运行器中
+      - name: Set up Pytyhon
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE with PyInstaller
+        run: |
+          pyinstaller ^
+            --noconsole ^
+            --onefile ^
+            --paths app ^
+            --collect-data streamlit ^
+            --name Streamline-Analyst ^
+            app/app.py
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artiface@v4
+        with:
+          name: Streamline-Analyst-EXE
+          path: dist/Streamline-Analyst.exe
+          retention-days: 7
