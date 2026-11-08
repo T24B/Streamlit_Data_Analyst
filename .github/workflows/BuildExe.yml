@@ -30,7 +30,7 @@ jobs:
             --onefile `
             --paths app `
             --collect-all streamlit `
-            --copy-metadata streaemlit `
+            --copy-metadata streamlit `
             --name Streamline-Analyst `
             app/app.py
 
