@@ -27,7 +27,6 @@ jobs:
       - name: Build EXE with PyInstaller
         run: |
           pyinstaller ^
-            --noconsole ^
             --onefile ^
             --paths app ^
             --collect-data streamlit ^
