@@ -35,7 +35,7 @@ jobs:
             app/app.py
 
       - name: Upload EXE artifact
-        uses: actions/upload-artiface@v4
+        uses: actions/upload-artifact@v4
         with:
           name: Streamline-Analyst-EXE
           path: dist/Streamline-Analyst.exe
